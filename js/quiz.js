@@ -13,22 +13,19 @@ $(document).ready(function() {
 
 	 $('#answers').on('click', '.answerBtn', function () { 
 	 	var clickedAnswer = event.target.id;
-	 	console.log("id: "+event.target.id);
-		if(event.target.id == answer) {
-			for(var i = 0; i < 4; i++) {
-				if(i == answer) {
-					$('#'+i).addClass('rightAnswer');
-				}
-				else {
-					$('#'+i).addClass('wrongAnswer');
-				}
+		
+		for(var i = 0; i < 4; i++) {
+			if(i == answer) {
+				$('#'+i).addClass('rightAnswer');
 			}
+			else {
+				$('#'+i).addClass('wrongAnswer');
+			}
+		}
+		if(event.target.id == answer) {
+			console.log("right");
 		} 
 	});
-
-	function testFunction() {
-		console.log("TEST");
-	}
 
 	function startQuiz() {
 		var faction = factions[Math.floor(Math.random()*factions.length)];
@@ -82,7 +79,8 @@ $(document).ready(function() {
 	}
 
 	function showFlavor(flavor, id) {
-		var button = '<button class="answerBtn" id='+ id +'>' + flavor + '</button> <br>';
+		var myFlavor = flavor.replace(/\\n/g, '<br />');
+		var button = '<button class="answerBtn" id='+ id +'>' + myFlavor + '</button> <br>';
 		$('#answers').append(button);
 	}
 
