@@ -4,16 +4,16 @@ $(document).ready(function() {
 	getScrollsJSON();
 
 	var answer;
+	var score = 0;
 
-	$('#btnStart').on('click', function() {
-		$('#picture').empty();
-		$('#answers').empty();
-		startQuiz();
+	$('#nextButton').on('click', function() {
+		start();
 	});
 
-	 $('#answers').on('click', '.answerBtn', function () { 
-	 	var clickedAnswer = event.target.id;
+	$('#answers').on('click', '.answerBtn', function () { 
+	 	var target = event.target;
 		
+		changeOpacity(target, 0);
 		for(var i = 0; i < 4; i++) {
 			if(i == answer) {
 				$('#'+i).addClass('rightAnswer');
@@ -22,10 +22,34 @@ $(document).ready(function() {
 				$('#'+i).addClass('wrongAnswer');
 			}
 		}
-		if(event.target.id == answer) {
-			console.log("right");
+		if(target.id == answer) {
+			score++;
 		} 
 	});
+
+	$('#answers').on('mouseover', 'a', function() {
+		var target = event.target;
+		changeOpacity(target, 0.5);
+	});
+
+	$('#answers').on('mouseout', 'a', function() {
+		var target = event.target;
+		changeOpacity(target, 0);
+	});
+
+	function changeOpacity(e, opacity) {
+		var currentColor = $(e).css('border-color');
+		var colors = currentColor.match(/\(([^)]+)\)/);
+		var newColor = "rgba("+ colors[1] + ", " + opacity + ")";
+		console.log(newColor);
+		$(e).css('background-color', newColor);
+	}
+
+	function start() {
+		$('#picture').empty();
+		$('#answers').empty();
+		startQuiz();
+	}
 
 	function startQuiz() {
 		var faction = factions[Math.floor(Math.random()*factions.length)];
@@ -63,7 +87,7 @@ $(document).ready(function() {
 			if(index == answer) {
 				showImage(scrolls[id].image);
 			}
-			showFlavor(flavor, index);
+			showFlavor(flavor, index, faction);
    		}
 	}
 
@@ -75,17 +99,18 @@ $(document).ready(function() {
 	function sendJsonRequest(url) {
 		$.getJSON(url, function (json) {
 			scrolls = json.data;
+			start();
     	});
 	}
 
-	function showFlavor(flavor, id) {
+	function showFlavor(flavor, id, faction) {
 		var myFlavor = flavor.replace(/\\n/g, '<br />');
-		var button = '<button class="answerBtn" id='+ id +'>' + myFlavor + '</button> <br>';
+		var button = '<a href="#" class="answerBtn ' + faction + '" id='+ id +'>' + myFlavor + '</a> <br>';
 		$('#answers').append(button);
 	}
 
 	function showImage(id) {
-		var image =  '<img class="columnElement scroll" id="img'+id+'" src="'+getImageFromID(id)+'"/>';
+		var image =  '<img class="scrollImg" id="img'+id+'" src="'+getImageFromID(id)+'"/>';
 		$('#picture').append(image);
 	}
 
