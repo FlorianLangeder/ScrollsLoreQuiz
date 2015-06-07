@@ -10,7 +10,7 @@ $(document).ready(function() {
 		start();
 	});
 
-	$('#answers').on('click', '.answerBtn', function () { 
+	$('#answers').on('click', '.answerBtn', function (event) { 
 	 	var target = event.target;
 		
 		changeOpacity(target, 0);
@@ -27,22 +27,26 @@ $(document).ready(function() {
 		} 
 	});
 
-	$('#answers').on('mouseover', 'a', function() {
+	$('#answers').on('mouseover', 'a', function(event) {
 		var target = event.target;
+		console.log(target);
 		changeOpacity(target, 0.5);
 	});
 
-	$('#answers').on('mouseout', 'a', function() {
+	$('#answers').on('mouseout', 'a', function(event) {
 		var target = event.target;
 		changeOpacity(target, 0);
 	});
 
 	function changeOpacity(e, opacity) {
-		var currentColor = $(e).css('border-color');
-		var colors = currentColor.match(/\(([^)]+)\)/);
-		var newColor = "rgba("+ colors[1] + ", " + opacity + ")";
+		var currentColor = $(e).css('borderTopColor');
+		console.log(currentColor);
+		var subStringColor = currentColor.split("(");
+		var colors = subStringColor[1].split(")");
+		console.log(colors);
+		var newColor = "rgba("+ colors[0] + ", " + opacity + ")";
 		console.log(newColor);
-		$(e).css('background-color', newColor);
+		$(e).css('backgroundColor', newColor);
 	}
 
 	function start() {
