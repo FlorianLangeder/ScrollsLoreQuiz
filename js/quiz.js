@@ -4,6 +4,7 @@ $(document).ready(function() {
 	getScrollsJSON();
 
 	var answer;
+	var usedScrolls = [];
 	var score = 0;
 
 	$('#nextButton').on('click', function() {
@@ -29,7 +30,6 @@ $(document).ready(function() {
 
 	$('#answers').on('mouseover', 'a', function(event) {
 		var target = event.target;
-		console.log(target);
 		changeOpacity(target, 0.5);
 	});
 
@@ -40,18 +40,16 @@ $(document).ready(function() {
 
 	function changeOpacity(e, opacity) {
 		var currentColor = $(e).css('borderTopColor');
-		console.log(currentColor);
 		var subStringColor = currentColor.split("(");
 		var colors = subStringColor[1].split(")");
-		console.log(colors);
 		var newColor = "rgba("+ colors[0] + ", " + opacity + ")";
-		console.log(newColor);
 		$(e).css('backgroundColor', newColor);
 	}
 
 	function start() {
 		$('#picture').empty();
 		$('#answers').empty();
+		usedScrolls = [];
 		startQuiz();
 	}
 
@@ -68,7 +66,20 @@ $(document).ready(function() {
 	}
 
 	function getRandomScrollID() {
-		return Math.floor((Math.random() * scrolls.length-1)+1);
+		var id, wrong;
+		while(true) {
+			id = Math.floor((Math.random() * scrolls.length-1)+1);
+			wrong = 0;
+			for(var i = 0; i < usedScrolls.length; i++) {
+				if(usedScrolls[i] == id) {
+					wrong ++;
+				}
+			}
+			if(wrong == 0) {
+				usedScrolls.push(id);
+				return id;
+			}
+		}
 	}
 
 	function getFlavorForID(id, faction, index) {
