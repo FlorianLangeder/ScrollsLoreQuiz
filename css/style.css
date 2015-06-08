@@ -24,6 +24,21 @@ div {
 	padding-top: 24px;
 }
 
+#gold {
+	width: 50%;
+}
+
+#questionCounter {
+	text-decoration:none;
+	text-shadow:0px 1px 0px #000000;
+    font-family: "Adobe Caslon Pro", "Hoefler Text", Georgia, Garamond, Times, serif;
+	letter-spacing:0.1em;
+	text-align:center;
+	margin: 2px auto;
+	font-size: 20pt;
+	font-variant: small-caps;
+}
+
 #nextButton {
   position: absolute;
   top: 35%;
@@ -71,12 +86,14 @@ div {
 	margin: 2px auto;
 	text-transform: lowercase;
 	line-height: 145%;
-	font-size: 14pt;
+	font-size: 20pt;
 	font-variant: small-caps;
 }
+
 .answerBtn:hover {
 	background-color:transparent;
 }
+
 .answerBtn:active {
 	position:relative;
 	top:1px;
@@ -86,14 +103,34 @@ div {
 	border-color: rgba(128,00,128,1);
 }
 
+.decay-text {
+	color: rgba(128,00,128,1);
+}
+
 .energy {
 	border-color: rgba(255,153,00,1);
+}
+
+.energy-text {
+	color: rgba(255,153,00,1);
 }
 
 .growth {
 	border-color: rgba(00,255,00,1);
 }
 
+.growth-text {
+	color: rgba(00,255,00,1);
+}
+
 .order {
 	border-color: rgba(51,102,153,1);
+}
+
+.order-text {
+	color: rgba(51,102,153,1);
+}
+
+.gold-text {
+	color: #FFD700;
 }

@@ -6,26 +6,45 @@ $(document).ready(function() {
 	var answer;
 	var usedScrolls = [];
 	var score = 0;
+	var curQuestion = 1;
+	var totalQuestions = 20;
+
+	$('#curQuestion').text(curQuestion);
+	$('#totalQuestions').text(totalQuestions);
 
 	$('#nextButton').on('click', function() {
-		start();
+		if(++curQuestion > totalQuestions) {
+			endQuiz();
+		} 
+		else {
+			$('#curQuestion').text(curQuestion);
+			restart();
+		}
 	});
 
 	$('#answers').on('click', '.answerBtn', function (event) { 
 	 	var target = event.target;
 		
 		changeOpacity(target, 0);
-		for(var i = 0; i < 4; i++) {
+		/*for(var i = 0; i < 4; i++) {
 			if(i == answer) {
 				$('#'+i).addClass('rightAnswer');
 			}
 			else {
 				$('#'+i).addClass('wrongAnswer');
 			}
-		}
+		}*/
 		if(target.id == answer) {
 			score++;
+		}
+		if(++curQuestion > totalQuestions) {
+			endQuiz();
 		} 
+		else {
+			$('#curQuestion').text(curQuestion);
+			restart();
+		}
+		
 	});
 
 	$('#answers').on('mouseover', 'a', function(event) {
@@ -47,6 +66,13 @@ $(document).ready(function() {
 	}
 
 	function start() {
+		score = 0;
+		curQuestion = 1;
+		totalQuestions = 20;
+		restart();
+	}
+
+	function restart() {
 		$('#picture').empty();
 		$('#answers').empty();
 		usedScrolls = [];
@@ -57,6 +83,15 @@ $(document).ready(function() {
 		var faction = factions[Math.floor(Math.random()*factions.length)];
 		answer = Math.floor(Math.random() * 4);
 		getScrolls(faction);
+	}
+
+	function endQuiz() {
+		var image =  '<a href="index.html" id="gold"><img src="img/goldpile.png"/> </a>';
+		$('#picture').replaceWith(image);
+		var scoreText = '<span class="gold-text"> Congratulations, you got '+ score + ' right answers. </span>';
+		$('#questionCounter').empty();
+		$('#questionCounter').append(scoreText);
+		$('#answers').empty();
 	}
 
 	function getScrolls(faction) {
@@ -114,7 +149,7 @@ $(document).ready(function() {
 	function sendJsonRequest(url) {
 		$.getJSON(url, function (json) {
 			scrolls = json.data;
-			start();
+			restart();
     	});
 	}
 
@@ -122,6 +157,8 @@ $(document).ready(function() {
 		var myFlavor = flavor.replace(/\\n/g, '<br />');
 		var button = '<a href="#" class="answerBtn ' + faction + '" id='+ id +'>' + myFlavor + '</a> <br>';
 		$('#answers').append(button);
+		$('#questionCounter').removeClass();
+		$('#questionCounter').addClass(faction+"-text");
 	}
 
 	function showImage(id) {
