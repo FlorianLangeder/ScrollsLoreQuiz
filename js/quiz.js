@@ -4,36 +4,94 @@ $(document).ready(function() {
 	getScrollsJSON();
 
 	var answer;
+	var usedScrolls = [];
+	var score = 0;
+	var curQuestion = 1;
+	var totalQuestions = 20;
 
-	$('#btnStart').on('click', function() {
+	$('#curQuestion').text(curQuestion);
+	$('#totalQuestions').text(totalQuestions);
+
+	$('#nextButton').on('click', function() {
+		if(++curQuestion > totalQuestions) {
+			endQuiz();
+		} 
+		else {
+			$('#curQuestion').text(curQuestion);
+			restart();
+		}
+	});
+
+	$('#answers').on('click', '.answerBtn', function (event) { 
+	 	var target = event.target;
+		
+		changeOpacity(target, 0);
+		/*for(var i = 0; i < 4; i++) {
+			if(i == answer) {
+				$('#'+i).addClass('rightAnswer');
+			}
+			else {
+				$('#'+i).addClass('wrongAnswer');
+			}
+		}*/
+		if(target.id == answer) {
+			score++;
+		}
+		if(++curQuestion > totalQuestions) {
+			endQuiz();
+		} 
+		else {
+			$('#curQuestion').text(curQuestion);
+			restart();
+		}
+		
+	});
+
+	$('#answers').on('mouseover', 'a', function(event) {
+		var target = event.target;
+		changeOpacity(target, 0.5);
+	});
+
+	$('#answers').on('mouseout', 'a', function(event) {
+		var target = event.target;
+		changeOpacity(target, 0);
+	});
+
+	function changeOpacity(e, opacity) {
+		var currentColor = $(e).css('borderTopColor');
+		var subStringColor = currentColor.split("(");
+		var colors = subStringColor[1].split(")");
+		var newColor = "rgba("+ colors[0] + ", " + opacity + ")";
+		$(e).css('backgroundColor', newColor);
+	}
+
+	function start() {
+		score = 0;
+		curQuestion = 1;
+		totalQuestions = 20;
+		restart();
+	}
+
+	function restart() {
 		$('#picture').empty();
 		$('#answers').empty();
+		usedScrolls = [];
 		startQuiz();
-	});
-
-	 $('#answers').on('click', '.answerBtn', function () { 
-	 	var clickedAnswer = event.target.id;
-	 	console.log("id: "+event.target.id);
-		if(event.target.id == answer) {
-			for(var i = 0; i < 4; i++) {
-				if(i == answer) {
-					$('#'+i).addClass('rightAnswer');
-				}
-				else {
-					$('#'+i).addClass('wrongAnswer');
-				}
-			}
-		} 
-	});
-
-	function testFunction() {
-		console.log("TEST");
 	}
 
 	function startQuiz() {
 		var faction = factions[Math.floor(Math.random()*factions.length)];
 		answer = Math.floor(Math.random() * 4);
 		getScrolls(faction);
+	}
+
+	function endQuiz() {
+		var image =  '<a href="index.html" id="gold"><img src="img/goldpile.png"/> </a>';
+		$('#picture').replaceWith(image);
+		var scoreText = '<span class="gold-text"> Congratulations, you got '+ score + ' right answers. </span>';
+		$('#questionCounter').empty();
+		$('#questionCounter').append(scoreText);
+		$('#answers').empty();
 	}
 
 	function getScrolls(faction) {
@@ -43,7 +101,20 @@ $(document).ready(function() {
 	}
 
 	function getRandomScrollID() {
-		return Math.floor((Math.random() * scrolls.length-1)+1);
+		var id, wrong;
+		while(true) {
+			id = Math.floor((Math.random() * scrolls.length-1)+1);
+			wrong = 0;
+			for(var i = 0; i < usedScrolls.length; i++) {
+				if(usedScrolls[i] == id) {
+					wrong ++;
+				}
+			}
+			if(wrong == 0) {
+				usedScrolls.push(id);
+				return id;
+			}
+		}
 	}
 
 	function getFlavorForID(id, faction, index) {
@@ -66,7 +137,7 @@ $(document).ready(function() {
 			if(index == answer) {
 				showImage(scrolls[id].image);
 			}
-			showFlavor(flavor, index);
+			showFlavor(flavor, index, faction);
    		}
 	}
 
@@ -78,16 +149,20 @@ $(document).ready(function() {
 	function sendJsonRequest(url) {
 		$.getJSON(url, function (json) {
 			scrolls = json.data;
+			restart();
     	});
 	}
 
-	function showFlavor(flavor, id) {
-		var button = '<button class="answerBtn" id='+ id +'>' + flavor + '</button> <br>';
+	function showFlavor(flavor, id, faction) {
+		var myFlavor = flavor.replace(/\\n/g, '<br />');
+		var button = '<a href="#" class="answerBtn ' + faction + '" id='+ id +'>' + myFlavor + '</a> <br>';
 		$('#answers').append(button);
+		$('#questionCounter').removeClass();
+		$('#questionCounter').addClass(faction+"-text");
 	}
 
 	function showImage(id) {
-		var image =  '<img class="columnElement scroll" id="img'+id+'" src="'+getImageFromID(id)+'"/>';
+		var image =  '<img class="scrollImg" id="img'+id+'" src="'+getImageFromID(id)+'"/>';
 		$('#picture').append(image);
 	}
 

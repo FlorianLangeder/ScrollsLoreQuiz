@@ -1,7 +1,136 @@
+html,body { 
+	height:100%; 
+}
+
+div {
+	text-align: center;
+}
+
+#header {
+	background: url("../img/header.png");
+	height: 100px;
+
+	background-repeat: repeat-y; 
+	background-position: right; 
+	position: relative;
+}
+
+#logo {
+	position: absolute;
+	right: 165px;
+}
+
+#logoImg {
+	padding-top: 24px;
+}
+
+#gold {
+	width: 50%;
+}
+
+#questionCounter {
+	text-decoration:none;
+	text-shadow:0px 1px 0px #000000;
+    font-family: "Adobe Caslon Pro", "Hoefler Text", Georgia, Garamond, Times, serif;
+	letter-spacing:0.1em;
+	text-align:center;
+	margin: 2px auto;
+	font-size: 20pt;
+	font-variant: small-caps;
+}
+
+#nextButton {
+  position: absolute;
+  top: 35%;
+  right: 30%;
+}
+
+.scrollImg {
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -khtml-border-radius: 8px;
+  border-radius: 8px;
+}
+
 .rightAnswer {
-	background-color: #20b2aa;
+	border-color: #00FF00 !important;
 }
 
 .wrongAnswer {
-	background-color: #FADADD;
+	border-color: #FF0000 !important;
+}
+
+.answers {
+	text-align: center;
+}
+
+.flavorText {
+	color: white;
+}
+
+.answerBtn {
+	background-color:transparent;
+	-moz-border-radius:28px;
+	-webkit-border-radius:28px;
+	border-radius:10px;
+	border:3px solid;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	padding:15px 31px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #2f6627;
+    font-family: "Adobe Caslon Pro", "Hoefler Text", Georgia, Garamond, Times, serif;
+	letter-spacing:0.1em;
+	text-align:center;
+	margin: 2px auto;
+	text-transform: lowercase;
+	line-height: 145%;
+	font-size: 20pt;
+	font-variant: small-caps;
+}
+
+.answerBtn:hover {
+	background-color:transparent;
+}
+
+.answerBtn:active {
+	position:relative;
+	top:1px;
+}
+
+.decay {
+	border-color: rgba(128,00,128,1);
+}
+
+.decay-text {
+	color: rgba(128,00,128,1);
+}
+
+.energy {
+	border-color: rgba(255,153,00,1);
+}
+
+.energy-text {
+	color: rgba(255,153,00,1);
+}
+
+.growth {
+	border-color: rgba(00,255,00,1);
+}
+
+.growth-text {
+	color: rgba(00,255,00,1);
+}
+
+.order {
+	border-color: rgba(51,102,153,1);
+}
+
+.order-text {
+	color: rgba(51,102,153,1);
+}
+
+.gold-text {
+	color: #FFD700;
 }
